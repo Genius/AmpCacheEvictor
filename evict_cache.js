@@ -14,18 +14,15 @@ chrome.tabs.query(
       url_to_cache = currentUrl.hostname + currentUrl.pathname;
     }
 
-    var xhttp = new XMLHttpRequest();
-    xhttp.onreadystatechange = function() {
-      if (this.readyState == 4) {
-        if(this.status == 204) {
-          document.getElementById("status").src = "images/checky.png";
-          chrome.tabs.update(tab.id, {url: "https://www.google.com/amp/"+url_to_cache});
-        } else {
-          document.getElementById("status").src = "images/error.png";
-        }
+    fetch("https://cdn.ampproject.org/update-ping/c/s/" + url_to_cache).then(function(response) {
+      if(response.status == 204) {
+        document.getElementById("status").src = "images/checky.png";
+        chrome.tabs.update(tab.id, {url: "https://www.google.com/amp/"+url_to_cache});
+      } else {
+        throw response;
       }
-    };
-    xhttp.open("GET", "https://cdn.ampproject.org/update-ping/c/s/" + url_to_cache, true);
-    xhttp.send();
+    }).catch(function() {
+      document.getElementById("status").src = "images/error.png";
+    });
   }
 );
