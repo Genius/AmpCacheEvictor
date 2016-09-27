@@ -1,8 +1,10 @@
-chrome.tabs.query({
-  'active': true,
-  'windowId': chrome.windows.WINDOW_ID_CURRENT
+chrome.tabs.query(
+  {
+    active: true,
+    currentWindow: true
   }, function (tabs) {
-    var currentUrl = new URL(tabs[0].url), url_to_cache;
+      var tab = tabs[0];
+    var currentUrl = new URL(tab.url), url_to_cache;
 
     if (currentUrl.hostname === "cdn.ampproject.org") {
       url_to_cache = currentUrl.pathname.replace(/.*\/c\/s\//, '');
@@ -17,6 +19,7 @@ chrome.tabs.query({
       if (this.readyState == 4) {
         if(this.status == 204) {
           document.getElementById("status").src = "images/checky.png";
+          chrome.tabs.update(tab.id, {url: "https://www.google.com/amp/"+url_to_cache});
         } else {
           document.getElementById("status").src = "images/error.png";
         }
