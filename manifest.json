@@ -5,7 +5,6 @@
   "manifest_version": 2,
   "icons": { "128": "images/ace-128.png" },
   "permissions": [
-    "tabs",
     "activeTab",
     "https://cdn.ampproject.org/update-ping/c/s/*"
   ],
